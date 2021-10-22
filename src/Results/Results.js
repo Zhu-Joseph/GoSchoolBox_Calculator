@@ -5,6 +5,7 @@ import Calculator from '../Calculator/Calculator'
 
 export default function Results() {
     const initialCalc = { "number": "" }
+    const [results, setResults] = useState(null)
     const [calculations, setCalculations] = useState("")
     
     //USED TO CREATE AN ARRAY OF FUNCTIONS TO HANDLE KEYPRESS
@@ -38,13 +39,28 @@ export default function Results() {
         setCalculations("")
     }
 
-    function handleClear() {
-        setCalculations("")
+    function handleBackspace() {
+        setCalculations(calculations.slice(0, -1))
     }
 
-    function handleBackspace() {
-        console.log("Working")
-        setCalculations(calculations.slice(0, -1))
+    const handleEquations = (event) => {
+        // console.log(event.target.value)
+        if(event.target.value) {
+            const symbols = ["+", "-", "*", "/"]
+            if(symbols.some(letter => calculations.includes(letter))) {
+                console.log("Working Man")    
+                // setCalculations(calculations.replace("+",""))
+                }
+            setCalculations(calculations.concat(event.target.value))
+        } 
+
+        else {
+            setCalculations(calculations.concat(event.key))
+        }
+    }
+
+    const handleEnter = (event) => {
+        setCalculations("")
     }
 
     useKey("0", functionArr[0])
@@ -57,14 +73,15 @@ export default function Results() {
     useKey("7", functionArr[7])
     useKey("8", functionArr[8])
     useKey("9", functionArr[9])
-    useKey("-", handleBackspace)
-    useKey("+", handleBackspace)
-    useKey("*", handleBackspace)
-    useKey("/", handleBackspace)
+    useKey("-", handleEquations)
+    useKey("+", handleEquations)
+    useKey("*", handleEquations)
+    useKey("/", handleEquations)
+
     useKey(".", handleBackspace)
     useKey("=", handleBackspace)
-    
     useKey("Enter", handleBackspace)
+
     useKey("Delete", handleBackspace)
     useKey("Backspace", handleBackspace)
 
@@ -73,7 +90,8 @@ export default function Results() {
 
     return (
         <>
-            <input type="number" value={calculations} />
+            <h1>Result: {results}</h1>
+            <input type="text" value={calculations} />
             <br/>
             <div>
                 <button onClick={handleClear}>Clear</button>
@@ -82,10 +100,10 @@ export default function Results() {
                 <button>&#8730;</button>  
             </div>
 
-            <button>&divide;</button>
-            <button>&times;</button>                
-            <button>-</button>                
-            <button>+</button>                
+            <button onClick={handleEquations} value="/">&divide;</button>
+            <button onClick={handleEquations} value="*">&times;</button>                
+            <button onClick={handleEquations} value="-">-</button>                
+            <button onClick={handleEquations} value="+">+</button>                
             <button>=</button>
             <button>Enter</button>
             <button>.</button>
