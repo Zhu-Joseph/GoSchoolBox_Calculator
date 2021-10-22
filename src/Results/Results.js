@@ -4,36 +4,48 @@ import Calculator from '../Calculator/Calculator'
 
 
 export default function Results() {
-    const initialCalc = { "number": 0 }
-    const [calculations, setCalculations] = useState({...initialCalc})
+    const initialCalc = { "number": "" }
+    const [calculations, setCalculations] = useState("")
     
     //USED TO CREATE AN ARRAY OF FUNCTIONS TO HANDLE KEYPRESS
     const functionArr = []
 
     function handleKey(number) {
         return function() {
-            setCalculations({
-                ...calculations,
-                "number": number
-                
-            })
+            setCalculations(calculations.concat(number))
         }
     }
-    console.log(calculations)
+
+    function handleClick ({target}) {
+        setCalculations(calculations.concat(target.value))
+    }
+
 
     //USED TO CREATE AN ARRAY TO LATER LOOP THROUGH AND CREATE BUTTONS AND FUNCTIONS
     const numbers = Array.from(Array(10).keys()).reverse()
     
     const listNumbers = numbers.map((number, index) => {
-        functionArr[functionArr.length] = handleKey(index)
+        functionArr[index] = handleKey(index)
         return (
         <Calculator 
         number={number}
-        index={index}/>
+        index={index}
+        handleClick={handleClick}/>
         ) 
     })
 
-    console.log(calculations)
+    function handleClear() {
+        setCalculations("")
+    }
+
+    function handleClear() {
+        setCalculations("")
+    }
+
+    function handleBackspace() {
+        console.log("Working")
+        setCalculations(calculations.slice(0, -1))
+    }
 
     useKey("0", functionArr[0])
     useKey("1", functionArr[1])
@@ -45,21 +57,43 @@ export default function Results() {
     useKey("7", functionArr[7])
     useKey("8", functionArr[8])
     useKey("9", functionArr[9])
+    useKey("-", handleBackspace)
+    useKey("+", handleBackspace)
+    useKey("*", handleBackspace)
+    useKey("/", handleBackspace)
+    useKey(".", handleBackspace)
+    useKey("=", handleBackspace)
+    
+    useKey("Enter", handleBackspace)
+    useKey("Delete", handleBackspace)
+    useKey("Backspace", handleBackspace)
+
+
+
 
     return (
         <>
-            <input type="number" value={calculations.number} />
+            <input type="number" value={calculations} />
             <br/>
-            <button>Clear</button>
-            <button>C</button>                
+            <div>
+                <button onClick={handleClear}>Clear</button>
+                <button onClick={handleBackspace}>C</button>  
+                <button>x<sup>2</sup></button>     
+                <button>&#8730;</button>  
+            </div>
+
             <button>&divide;</button>
             <button>&times;</button>                
             <button>-</button>                
             <button>+</button>                
             <button>=</button>
-            <button>x<sup>2</sup></button>     
-            <button>&#8730;</button>           
-            {listNumbers}
+            <button>Enter</button>
+            <button>.</button>
+
+
+            <div className="numbers">
+                {listNumbers}
+            </div>           
         </>
     )
 }

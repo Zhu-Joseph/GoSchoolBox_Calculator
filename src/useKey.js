@@ -13,7 +13,9 @@ export default function useKey(key, eventKey) {
                 ref.current(event)
             }
         }
-        document.addEventListener("keypress", handle)
-        return () => document.removeEventListener("keypress", handle)
+        document.addEventListener("keydown", handle)
+        return () => document.removeEventListener("keydown", handle)
     }, [key])
 }
+
+//USING KEYPRESS INSTEAD OF KEYDOWN WILL NOT WORK FOR BACKSPACE AND DELETE
