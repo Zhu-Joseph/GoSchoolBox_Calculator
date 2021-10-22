@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 
 
 
-export default function Subtraction() {
+export default function Memory() {
     return (
         <div>
             
