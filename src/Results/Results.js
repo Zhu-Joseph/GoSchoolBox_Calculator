@@ -44,23 +44,49 @@ export default function Results() {
     }
 
     const handleEquations = (event) => {
-        // console.log(event.target.value)
+
+        const symbols = ["+", "-", "*", "/"]
         if(event.target.value) {
-            const symbols = ["+", "-", "*", "/"]
             if(symbols.some(letter => calculations.includes(letter))) {
-                console.log("Working Man")    
-                // setCalculations(calculations.replace("+",""))
+                setCalculations(calculations.slice(0, -1).concat(event.target.value))
                 }
-            setCalculations(calculations.concat(event.target.value))
+                else {
+                    setCalculations(calculations.concat(event.target.value))
+                }
         } 
 
         else {
-            setCalculations(calculations.concat(event.key))
+            if(symbols.some(letter => calculations.includes(letter))) {
+                setCalculations(calculations.slice(0, -1).concat(event.key))
+            }
+            else {
+                setCalculations(calculations.concat(event.key))
+            }
         }
     }
 
     const handleEnter = (event) => {
         setCalculations("")
+    }
+
+    const handleDecimal = (event) => {        
+        if(event.target.value) {
+            if(calculations.includes(".")) {
+                window.alert("Number is already in decimal format")
+                }
+                else {
+                    setCalculations(calculations.concat(event.target.value))
+                }
+        } 
+
+        else {
+            if(calculations.includes(".")) {
+                window.alert("Number is already in decimal format")
+            }
+            else {
+                setCalculations(calculations.concat(event.key))
+            }
+        }
     }
 
     useKey("0", functionArr[0])
@@ -78,7 +104,7 @@ export default function Results() {
     useKey("*", handleEquations)
     useKey("/", handleEquations)
 
-    useKey(".", handleBackspace)
+    useKey(".", handleDecimal)
     useKey("=", handleBackspace)
     useKey("Enter", handleBackspace)
 
@@ -106,7 +132,7 @@ export default function Results() {
             <button onClick={handleEquations} value="+">+</button>                
             <button>=</button>
             <button>Enter</button>
-            <button>.</button>
+            <button onClick={handleDecimal} value=".">.</button>
 
 
             <div className="numbers">
