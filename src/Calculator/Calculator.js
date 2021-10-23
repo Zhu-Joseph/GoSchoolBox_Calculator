@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from 'react'
-import useKey from "../useKey"
 import "./Calculator.css"
 
 export default function Calculator(props) {

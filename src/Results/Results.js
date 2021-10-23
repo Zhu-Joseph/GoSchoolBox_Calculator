@@ -44,7 +44,7 @@ export default function Results() {
     }
 
     const handleEquations = (event) => {
-
+        
         const symbols = ["+", "-", "*", "/"]
         if(event.target.value) {
             if(symbols.some(letter => calculations.includes(letter))) {
@@ -66,6 +66,10 @@ export default function Results() {
     }
 
     const handleEnter = (event) => {
+        const symbols = /\s+-\s*/
+        calculations.split(symbols)
+        console.log(calculations)
+        setResults(calculations)
         setCalculations("")
     }
 
@@ -89,6 +93,7 @@ export default function Results() {
         }
     }
 
+    //HANDLE KEYBOARD FOR NUMBERS
     useKey("0", functionArr[0])
     useKey("1", functionArr[1])
     useKey("2", functionArr[2])
@@ -99,15 +104,19 @@ export default function Results() {
     useKey("7", functionArr[7])
     useKey("8", functionArr[8])
     useKey("9", functionArr[9])
+    
+    //HANDLE KEYBOARD FOR ARITHMETIC
     useKey("-", handleEquations)
     useKey("+", handleEquations)
     useKey("*", handleEquations)
     useKey("/", handleEquations)
-
+    
+    //HANDLE KEYBOARD FOR DECIMAL AND ENTER
     useKey(".", handleDecimal)
-    useKey("=", handleBackspace)
-    useKey("Enter", handleBackspace)
+    useKey("=", handleEnter)
+    useKey("Enter", handleEnter)
 
+    //HANDLE DELETE AND BACKSPACES
     useKey("Delete", handleBackspace)
     useKey("Backspace", handleBackspace)
 
@@ -122,16 +131,16 @@ export default function Results() {
             <div>
                 <button onClick={handleClear}>Clear</button>
                 <button onClick={handleBackspace}>C</button>  
-                <button>x<sup>2</sup></button>     
-                <button>&#8730;</button>  
+                <button onClick={handleEquations}  value="&#178;">x&#178;</button>     
+                <button onClick={handleEquations} value="&#8730;">&#8730;</button>  
             </div>
 
             <button onClick={handleEquations} value="/">&divide;</button>
             <button onClick={handleEquations} value="*">&times;</button>                
             <button onClick={handleEquations} value="-">-</button>                
             <button onClick={handleEquations} value="+">+</button>                
-            <button>=</button>
-            <button>Enter</button>
+            <button onClick={handleEnter}>=</button>
+            <button onClick={handleEnter}>Enter</button>
             <button onClick={handleDecimal} value=".">.</button>
 
 
