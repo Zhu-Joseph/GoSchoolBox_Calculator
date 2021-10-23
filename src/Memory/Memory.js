@@ -3,10 +3,13 @@ import React, { useEffect } from 'react'
 
 
 
-export default function Memory() {
+export default function Memory(props) {
+    const {mem, index} = props
+
+
     return (
-        <div>
-            
+        <div key={index}>
+            {mem}
         </div>
     )
 }

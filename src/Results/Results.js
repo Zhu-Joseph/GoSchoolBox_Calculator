@@ -1,13 +1,13 @@
 import React, {useState} from 'react'
 import useKey from '../useKey'
 import Calculator from '../Calculator/Calculator'
+import Memory from '../Memory/Memory'
 
 
 export default function Results() {
-    const initialCalc = { "number": "" }
     const [results, setResults] = useState(null)
     const [calculations, setCalculations] = useState("")
-    
+    const [memory, setMemory] = useState([])
     //USED TO CREATE AN ARRAY OF FUNCTIONS TO HANDLE KEYPRESS
     const functionArr = []
 
@@ -21,6 +21,13 @@ export default function Results() {
         setCalculations(calculations.concat(target.value))
     }
 
+    const listMemory = memory.map((mem, index) => {
+        return (
+            <Memory mem={mem} index={index}/>
+        )
+    })
+
+    console.log(memory)
 
     //USED TO CREATE AN ARRAY TO LATER LOOP THROUGH AND CREATE BUTTONS AND FUNCTIONS
     const numbers = Array.from(Array(10).keys()).reverse()
@@ -66,10 +73,36 @@ export default function Results() {
     }
 
     const handleEnter = (event) => {
-        const symbols = /\s+-\s*/
-        calculations.split(symbols)
-        console.log(calculations)
-        setResults(calculations)
+        let answer = null
+
+        if(calculations.includes("*")) {
+            let temp = calculations.split("*")
+            answer = Number(temp[0]) * Number(temp[1])
+        }
+
+        else if(calculations.includes("/")) {
+            let temp = calculations.split("/")
+            answer = Number(temp[0]) / Number(temp[1])
+        }
+
+        else if(calculations.includes("+")) {
+            let temp = calculations.split("+")
+            answer = Number(temp[0]) + Number(temp[1])
+        }
+        
+        else if(calculations.includes("-")) {
+            let temp = calculations.split("-")
+            answer = Number(temp[0]) - Number(temp[1])
+        }
+
+        else {
+            answer = Number(calculations)
+        }
+
+        setMemory(memory.concat(`${calculations} = ${answer}`))
+
+        console.log(memory)
+        setResults(answer)
         setCalculations("")
     }
 
@@ -91,6 +124,22 @@ export default function Results() {
                 setCalculations(calculations.concat(event.key))
             }
         }
+    }
+
+    const handleSqr = (event) => {
+        const answer = Number(calculations**2)
+        setMemory(memory.concat(`${calculations}^2 = ${answer}`))
+
+        setResults(answer)
+        setCalculations("")
+    }
+
+    const handleSqrRoot = (event) => {
+        const answer = Number(calculations**.5)
+        setMemory(memory.concat(`${calculations}^2 = ${answer}`))
+
+        setResults(answer)
+        setCalculations("")
     }
 
     //HANDLE KEYBOARD FOR NUMBERS
@@ -125,14 +174,14 @@ export default function Results() {
 
     return (
         <>
-            <h1>Result: {results}</h1>
+            <h1>Answer: {results}</h1>
             <input type="text" value={calculations} />
             <br/>
             <div>
                 <button onClick={handleClear}>Clear</button>
                 <button onClick={handleBackspace}>C</button>  
-                <button onClick={handleEquations}  value="&#178;">x&#178;</button>     
-                <button onClick={handleEquations} value="&#8730;">&#8730;</button>  
+                <button onClick={handleSqr}  value="&#178;">x&#178;</button>     
+                <button onClick={handleSqrRoot} value="&#8730;">&#8730;</button>  
             </div>
 
             <button onClick={handleEquations} value="/">&divide;</button>
@@ -146,7 +195,11 @@ export default function Results() {
 
             <div className="numbers">
                 {listNumbers}
-            </div>           
+            </div>  
+            <h2>History</h2>
+            <div>
+                {listMemory}
+            </div>         
         </>
     )
 }
