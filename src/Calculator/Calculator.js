@@ -1,5 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react'
-import "./Calculator.css"
+import React from 'react'
 
 export default function Calculator(props) {
     const {number, index, handleClick} = props

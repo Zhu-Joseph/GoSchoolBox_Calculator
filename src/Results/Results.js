@@ -8,9 +8,18 @@ export default function Results() {
     const [results, setResults] = useState(null)
     const [calculations, setCalculations] = useState("")
     const [memory, setMemory] = useState([])
-    //USED TO CREATE AN ARRAY OF FUNCTIONS TO HANDLE KEYPRESS
-    const functionArr = []
+    
+    const functionArr = [] //USED TO CREATE AN ARRAY OF FUNCTIONS TO HANDLE KEYPRESS
+    //USED TO CREATE AN ARRAY TO LATER LOOP THROUGH AND CREATE BUTTONS AND FUNCTIONS
+    const numbers = Array.from(Array(10).keys())
+    
+    const listMemory = memory.map((mem, index) => {
+        return (
+            <Memory mem={mem} index={index}/>
+        )
+    })
 
+    //CLICK AND KEYBOARD EVENT HANDLERS
     function handleKey(number) {
         return function() {
             setCalculations(calculations.concat(number))
@@ -21,17 +30,6 @@ export default function Results() {
         setCalculations(calculations.concat(target.value))
     }
 
-    const listMemory = memory.map((mem, index) => {
-        return (
-            <Memory mem={mem} index={index}/>
-        )
-    })
-
-    console.log(memory)
-
-    //USED TO CREATE AN ARRAY TO LATER LOOP THROUGH AND CREATE BUTTONS AND FUNCTIONS
-    const numbers = Array.from(Array(10).keys()).reverse()
-    
     const listNumbers = numbers.map((number, index) => {
         functionArr[index] = handleKey(index)
         return (
@@ -50,8 +48,7 @@ export default function Results() {
         setCalculations(calculations.slice(0, -1))
     }
 
-    const handleEquations = (event) => {
-        
+    const handleEquations = (event) => { 
         const symbols = ["+", "-", "*", "/"]
         if(event.target.value) {
             if(symbols.some(letter => calculations.includes(letter))) {
@@ -100,8 +97,6 @@ export default function Results() {
         }
 
         setMemory(memory.concat(`${calculations} = ${answer}`))
-
-        console.log(memory)
         setResults(answer)
         setCalculations("")
     }
@@ -111,9 +106,9 @@ export default function Results() {
             if(calculations.includes(".")) {
                 window.alert("Number is already in decimal format")
                 }
-                else {
-                    setCalculations(calculations.concat(event.target.value))
-                }
+            else {
+                setCalculations(calculations.concat(event.target.value))
+            }
         } 
 
         else {
@@ -136,7 +131,7 @@ export default function Results() {
 
     const handleSqrRoot = (event) => {
         const answer = Number(calculations**.5)
-        setMemory(memory.concat(`${calculations}^2 = ${answer}`))
+        setMemory(memory.concat(`S25qrt(${calculations}) = ${answer}`))
 
         setResults(answer)
         setCalculations("")
@@ -169,9 +164,6 @@ export default function Results() {
     useKey("Delete", handleBackspace)
     useKey("Backspace", handleBackspace)
 
-
-
-
     return (
         <>
             <h1>Answer: {results}</h1>
@@ -184,14 +176,15 @@ export default function Results() {
                 <button onClick={handleSqrRoot} value="&#8730;">&#8730;</button>  
             </div>
 
-            <button onClick={handleEquations} value="/">&divide;</button>
-            <button onClick={handleEquations} value="*">&times;</button>                
-            <button onClick={handleEquations} value="-">-</button>                
-            <button onClick={handleEquations} value="+">+</button>                
-            <button onClick={handleEnter}>=</button>
-            <button onClick={handleEnter}>Enter</button>
-            <button onClick={handleDecimal} value=".">.</button>
-
+            <div>
+                <button onClick={handleEquations} value="/">&divide;</button>
+                <button onClick={handleEquations} value="*">&times;</button>                
+                <button onClick={handleEquations} value="-">-</button>                
+                <button onClick={handleEquations} value="+">+</button>                
+                <button onClick={handleEnter}>=</button>
+                <button onClick={handleEnter}>Enter</button>
+                <button onClick={handleDecimal} value=".">.</button>
+            </div>
 
             <div className="numbers">
                 {listNumbers}

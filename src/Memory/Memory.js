@@ -1,7 +1,4 @@
-import React, { useEffect } from 'react'
-
-
-
+import React from 'react'
 
 export default function Memory(props) {
     const {mem, index} = props
